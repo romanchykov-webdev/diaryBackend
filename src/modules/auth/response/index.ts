@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 class UserResponse {
@@ -21,6 +21,10 @@ class UserResponse {
   @ApiProperty()
   @IsString()
   themeModeDevice: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  popupForNewUser: boolean;
 
   @ApiProperty()
   @IsString()

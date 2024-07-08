@@ -1,4 +1,4 @@
-import { Column, Model, Table } from 'sequelize-typescript';
+import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table
 export class User extends Model {
@@ -16,6 +16,13 @@ export class User extends Model {
 
   @Column
   themeModeDevice: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+    defaultValue: true,
+  })
+  popupForNewUser: boolean;
 
   @Column
   avatar: string;
