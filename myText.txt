@@ -1,0 +1,126 @@
+nest new backend    //nest new "name folder"
+npm run start:dev   //после сохранения идет перезапуск автоматически
+
+nest g module user  //для создание модуля nest g module "name module"
+
+nest g controller user --no-spec  //для создание контроллера nest g controller "name controller" "чтобы не было файла тест"
+
+
+
+
+nest g service user --no-spec  //для создание контроллера nest g controller "name service" "чтобы не было файла тест"
+
+
+sudo docker-compose up   //установка бд
+-d — запуск контейнер в фоновом режиме. Это позволяет использовать терминал, из которого запущен контейнер, для выполнения других команд во время работы контейнера.
+
+npm i --save @nestjs/config  //https://docs.nestjs.com/techniques/configuration
+
+
+//подключаем Sequelize для работы с БД  https://docs.nestjs.com/recipes/sql-sequelize
+
+npm install --save sequelize sequelize-typescript pg   ///устанавливаем  sequelize с пакетом для работы с БД pg
+
+npm install --save-dev @types/sequelize //подклучаем типизацию sequelize
+
+npm i --save @nestjs/sequelize
+
+
+
+//Чтобы начать его использовать, мы сначала устанавливаем необходимую
+//зависимость.
+// RESTful API. Nest предоставляет специальный модуль, который позволяет
+//генерировать такую ​​спецификацию с помощью декораторов.
+npm install --save @nestjs/swagger
+
+
+
+// нужно скачать пакет для валидации
+npm i class-validator
+
+
+///
+npm install class-transformer
+
+//Hashing# hashing to password
+npm i bcrypt
+// для тепизации
+npm i -D @types/bcrypt
+
+// create nev module  auth
+npx nest g module auth
+// crete controller without test file
+npx nest g controller auth --no-spec
+// create service without test file
+npx nest g service auth --no-spec
+
+//create module token
+npx nest g module token
+//create service token without test file
+npx nest g service token --no-spec
+
+//install jwt token
+npm i --save @nestjs/jwt
+
+//
+npm install --save @nestjs/passport passport passport-jwt
+
+npm install --save-dev @types/passport-jwt
+
+remove github desktop
+
+//create dir watchlist
+npx nest g module watchlist
+npx nest g service watchlist --no-spec
+npx nest g controller watchlist --no-spec
+
+
+
+
+
+
+///main.ts gpt
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './modules/app/app.module';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // Middleware для обработки CORS
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'https://cryptocurrency-front-end-fb4n.vercel.app',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true, // Разрешение отправки cookie и аутентификации через CORS
+    allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization',
+  });
+
+  // Использование глобального валидационного пайпа
+  app.useGlobalPipes(new ValidationPipe());
+
+  // Создание Swagger документации
+  const config = new DocumentBuilder()
+    .setTitle('API testing documentation')
+    .setDescription('This API is for testing documentation')
+    .setVersion('1.0')
+    .addTag('API')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  // Получение порта из конфигурации
+  const configService = app.get(ConfigService);
+  const port = configService.get('port');
+
+  // Запуск приложения
+  await app.listen(port);
+  console.log(`Application is running on: http://localhost:${port}`);
+}
+
+bootstrap();
