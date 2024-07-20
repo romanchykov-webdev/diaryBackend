@@ -54,6 +54,8 @@ export class UserService {
         language: dto.language,
         themeModeDevice: dto.themeModeDevice,
         avatar: dto.avatar,
+        switcherFolder: dto.switcherFolder,
+        colors: dto.colors,
       });
       this.logger.log(
         'User successfully created in database with email: ' + dto.email,

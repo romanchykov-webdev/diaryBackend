@@ -20,10 +20,19 @@ export class User extends Model {
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
-    defaultValue: true,
+    defaultValue: true
   })
   popupForNewUser: boolean;
 
   @Column
   avatar: string;
+
+  @Column({
+    type: DataType.ARRAY(DataType.STRING),
+    allowNull: true
+  })
+  colors: string[];
+
+  @Column
+  switcherFolder: string;
 }
