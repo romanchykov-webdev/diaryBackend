@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from "@nestjs/common";
 import { CardsService } from "./cards.service";
 import { CreateCardDTO } from "./dto/create-card.dto";
 import { JwtAuthGuard } from "../../guards/jwt-guard";

@@ -1,9 +1,9 @@
 import {
   IsArray,
-  IsBoolean,
+  IsBoolean, IsNumber,
   IsOptional,
   IsString,
-  ValidateNested,
+  ValidateNested
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
@@ -59,4 +59,9 @@ export class UpdateCardDTO {
   @IsString()
   @IsOptional()
   backgroundColorCard?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 }

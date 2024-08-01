@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsString, ValidateNested } from "class-validator";
+import { IsArray, IsBoolean, IsNumber, IsString, ValidateNested } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 
@@ -57,4 +57,8 @@ export class CreateCardDTO {
   @ApiProperty()
   @IsString()
   backgroundColorCard: string;
+
+  @ApiProperty()
+  @IsNumber()
+  order: number;
 }
