@@ -1,9 +1,10 @@
 import {
   IsArray,
-  IsBoolean, IsNumber,
+  IsBoolean,
+  IsNumber,
   IsOptional,
   IsString,
-  ValidateNested
+  ValidateNested,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";

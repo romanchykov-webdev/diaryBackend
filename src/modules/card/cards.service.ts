@@ -92,4 +92,38 @@ export class CardsService {
       });
     }
   }
+  // Метод для обновления порядка карточек
+  async updateCardOrders(
+    userId: number,
+    updatedOrders: { id: string; order: number }[],
+  ): Promise<void> {
+    const transaction = await this.cardRepository.sequelize.transaction();
+
+    try {
+      for (const { id, order } of updatedOrders) {
+        await this.cardRepository.update(
+          { order },
+          {
+            where: {
+              id,
+              userId,
+            },
+            transaction,
+          },
+        );
+      }
+
+      await transaction.commit();
+      this.logger.log(
+        `Card orders successfully updated for user id: ${userId}`,
+      );
+    } catch (error) {
+      await transaction.rollback();
+      this.logger.error(
+        `Failed to update card orders for user id: ${userId}`,
+        error.stack,
+      );
+      throw error;
+    }
+  }
 }
