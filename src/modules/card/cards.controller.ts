@@ -71,4 +71,17 @@ export class CardsController {
     const user = request.user;
     return this.cardsService.updateCard(user.id, cardId, updateCardDTO);
   }
+
+  // Метод для получения одной карточки по ID
+  @ApiTags("API")
+  @ApiResponse({ status: 200, type: CreateCardDTO })
+  @UseGuards(JwtAuthGuard)
+  @Get(":id")
+  async getCardById(
+    @Param("id") cardId: string,
+    @Req() request,
+  ): Promise<CreateCardDTO> {
+    const user = request.user;
+    return this.cardsService.getCardById(user.id, cardId);
+  }
 }

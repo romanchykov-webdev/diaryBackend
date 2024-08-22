@@ -126,4 +126,18 @@ export class CardsService {
       throw error;
     }
   }
+
+  // Метод для получения одной карточки по ID
+  async getCardById(userId: number, cardId: string): Promise<Card> {
+    const card = await this.cardRepository.findOne({
+      where: { id: cardId, userId },
+    });
+
+    if (!card) {
+      throw new BadRequestException(AppError.CARD_NOT_FOUND);
+    }
+
+    this.logger.log(`Card with id ${cardId} retrieved for user id: ${userId}`);
+    return card;
+  }
 }
