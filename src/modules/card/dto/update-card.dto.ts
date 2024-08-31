@@ -31,6 +31,11 @@ export class UpdateCardDTO {
   textarea?: string;
 
   @ApiProperty()
+  @IsString()
+  @IsOptional()
+  typeCard?: string;
+
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   isFavorite?: boolean;

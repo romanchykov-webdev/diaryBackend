@@ -14,6 +14,10 @@ nest g service user --no-spec  //для создание контроллера 
 sudo docker-compose up   //установка бд
 -d — запуск контейнер в фоновом режиме. Это позволяет использовать терминал, из которого запущен контейнер, для выполнения других команд во время работы контейнера.
 
+Удаление одного контейнера:
+sudo docker rm nameContainer
+
+
 npm i --save @nestjs/config  //https://docs.nestjs.com/techniques/configuration
 
 

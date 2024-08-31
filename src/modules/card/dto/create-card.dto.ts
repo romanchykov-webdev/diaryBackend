@@ -34,6 +34,10 @@ export class CreateCardDTO {
   textarea: string;
 
   @ApiProperty()
+  @IsString()
+  typeCard: string;
+
+  @ApiProperty()
   @IsBoolean()
   isFavorite: boolean;
 
