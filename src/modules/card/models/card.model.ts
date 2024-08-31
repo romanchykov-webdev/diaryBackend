@@ -29,8 +29,13 @@ export class Card extends Model {
   })
   todoCompleted: Todo[];
 
-  @Column
+  @Column({
+    type: DataType.TEXT,
+  })
   textarea: string;
+
+  @Column
+  typeCard: string;
 
   @Column({
     type: DataType.BOOLEAN,
