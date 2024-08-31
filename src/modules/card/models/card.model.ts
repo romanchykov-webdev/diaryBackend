@@ -57,4 +57,7 @@ export class Card extends Model {
 
   @Column
   backgroundColorCard: string;
+
+  @Column
+  order: number;
 }

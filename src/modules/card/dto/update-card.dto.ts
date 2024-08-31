@@ -1,6 +1,7 @@
 import {
   IsArray,
   IsBoolean,
+  IsNumber,
   IsOptional,
   IsString,
   ValidateNested,
@@ -59,4 +60,9 @@ export class UpdateCardDTO {
   @IsString()
   @IsOptional()
   backgroundColorCard?: string;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 }
