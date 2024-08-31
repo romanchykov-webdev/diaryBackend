@@ -5,7 +5,7 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Delete,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -15,7 +15,7 @@ import { JwtAuthGuard } from "../../guards/jwt-guard";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateCardDTO } from "./dto/update-card.dto";
 import { UpdateCardOrdersDTO } from "./dto/update-card-orders.dto";
-import { GetUniqueLabelsDTO } from "./dto/get-unique-labels.dto";
+// import { GetUniqueLabelsDTO } from "./dto/get-unique-labels.dto";
 
 @Controller("cards")
 export class CardsController {
@@ -93,5 +93,22 @@ export class CardsController {
   ): Promise<CreateCardDTO> {
     const user = request.user;
     return this.cardsService.getCardById(user.id, cardId);
+  }
+
+  // Удаление карточки
+  @ApiTags("API")
+  @ApiResponse({ status: 200, description: "Card successfully deleted" })
+  @UseGuards(JwtAuthGuard)
+  @Delete(":id")
+  async deleteCard(@Param("id") cardId: string, @Req() request): Promise<void> {
+    const user = request.user;
+    console.log('Attempting to delete card with ID:', cardId);
+    try {
+      await this.cardsService.deleteCard(user.id, cardId);
+      console.log('Card successfully deleted');
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      throw error;
+    }
   }
 }

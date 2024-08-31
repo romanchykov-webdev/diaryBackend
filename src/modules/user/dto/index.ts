@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsOptional, IsString } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateUserDTO {
@@ -43,36 +43,44 @@ export class CreateUserDTO {
 export class UpdateUserDTO {
   @ApiProperty()
   @IsString()
-  userName: string;
+  @IsOptional()
+  userName?: string;
 
   @ApiProperty()
   @IsString()
-  email: string;
+  @IsOptional()
+  email?: string;
 
   @ApiProperty()
   @IsString()
-  language: string;
+  @IsOptional()
+  language?: string;
 
   @ApiProperty()
   @IsString()
-  themeModeDevice: string;
+  @IsOptional()
+  themeModeDevice?: string;
 
   @ApiProperty()
   @IsBoolean()
-  popupForNewUser: boolean;
+  @IsOptional()
+  popupForNewUser?: boolean;
 
   @ApiProperty()
   @IsString()
-  avatar: string;
+  @IsOptional()
+  avatar?: string;
 
   @ApiProperty()
   @IsString()
-  switcherFolder: string;
+  @IsOptional()
+  switcherFolder?: string;
 
   @ApiProperty({ type: [String] })
   @IsArray()
+  @IsOptional()
   @IsString({ each: true })
-  colors: string[];
+  colors?: string[];
 }
 
 export class UpdatePasswordDTO {

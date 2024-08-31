@@ -94,6 +94,7 @@ export class CardsService {
       });
     }
   }
+
   // Метод для обновления порядка карточек
   async updateCardOrders(
     userId: number,
@@ -167,4 +168,26 @@ export class CardsService {
       throw error;
     }
   }
+
+  // Метод для удаления карточки
+  async deleteCard(userId: number, cardId: string): Promise<void> {
+    this.logger.log('Attempting to delete card with ID: ' + cardId);
+    try {
+      const card = await this.cardRepository.findOne({
+        where: { id: cardId, userId },
+      });
+
+      if (!card) {
+        this.logger.error(`Card with id ${cardId} not found for user id: ${userId}`);
+        throw new BadRequestException(AppError.CARD_NOT_FOUND);
+      }
+
+      await card.destroy();
+      this.logger.log(`Card with id ${cardId} deleted successfully for user id: ${userId}`);
+    } catch (error) {
+      this.logger.error(`Error deleting card with id ${cardId} for user ${userId}`, error.stack);
+      throw error;
+    }
+  }
+
 }
