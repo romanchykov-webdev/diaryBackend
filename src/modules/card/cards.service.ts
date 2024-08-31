@@ -11,6 +11,8 @@ export class CardsService {
 
   constructor(
     @InjectModel(Card) private readonly cardRepository: typeof Card,
+    @InjectModel(Card)
+    private readonly cardModel: typeof Card,
   ) {}
 
   // create new Card
@@ -139,5 +141,30 @@ export class CardsService {
 
     this.logger.log(`Card with id ${cardId} retrieved for user id: ${userId}`);
     return card;
+  }
+
+  // Метод для получения id и labels карточек пользователя
+  async getCardIdsAndLabelsForUser(userId: number) {
+    try {
+      const cards = await this.cardModel.findAll({
+        attributes: ["id", "labels"], // Извлечение id и labels
+        where: { userId },
+      });
+
+      // const ids = cards.map((card) => card.id); // Массив id карточек
+      const allLabels = cards.flatMap((card) => card.labels); // Объединение всех labels
+      const uniqueLabels = [...new Set(allLabels)]; // Уникальные labels
+
+      return {
+        // ids,
+        labels: uniqueLabels,
+      };
+    } catch (error) {
+      this.logger.error(
+        `Failed to get card IDs and labels for user ${userId}`,
+        error,
+      );
+      throw error;
+    }
   }
 }

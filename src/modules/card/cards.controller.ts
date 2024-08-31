@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from "@nestjs/common";
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from "../../guards/jwt-guard";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateCardDTO } from "./dto/update-card.dto";
 import { UpdateCardOrdersDTO } from "./dto/update-card-orders.dto";
+import { GetUniqueLabelsDTO } from "./dto/get-unique-labels.dto";
 
 @Controller("cards")
 export class CardsController {
@@ -35,7 +37,7 @@ export class CardsController {
     );
   }
 
-  // create new Card
+  // Создание новой карточки
   @ApiTags("API")
   @ApiResponse({ status: 200, type: CreateCardDTO })
   @UseGuards(JwtAuthGuard)
@@ -48,7 +50,7 @@ export class CardsController {
     return this.cardsService.createCard(user.id, createCardDTO);
   }
 
-  // get all Cards
+  // Получение всех карточек
   @ApiTags("API")
   @ApiResponse({ status: 200, type: [CreateCardDTO] })
   @UseGuards(JwtAuthGuard)
@@ -58,7 +60,7 @@ export class CardsController {
     return this.cardsService.getAllCards(user.id);
   }
 
-  //   Update card
+  // Обновление карточки
   @ApiTags("API")
   @ApiResponse({ status: 200, type: UpdateCardDTO })
   @UseGuards(JwtAuthGuard)
@@ -70,6 +72,14 @@ export class CardsController {
   ): Promise<UpdateCardDTO> {
     const user = request.user;
     return this.cardsService.updateCard(user.id, cardId, updateCardDTO);
+  }
+
+  // Получение id и labels карточек пользователя
+  @UseGuards(JwtAuthGuard)
+  @Get("card-ids")
+  async getCardIdsAndLabels(@Req() req) {
+    const userId = req.user.id;
+    return this.cardsService.getCardIdsAndLabelsForUser(userId);
   }
 
   // Метод для получения одной карточки по ID
