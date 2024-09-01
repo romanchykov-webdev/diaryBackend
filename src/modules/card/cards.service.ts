@@ -4,6 +4,7 @@ import { Card } from "./models/card.model";
 import { CreateCardDTO } from "./dto/create-card.dto";
 import { UpdateCardDTO } from "./dto/update-card.dto";
 import { AppError } from "../../common/constants/errors";
+import { Op } from "sequelize"; // Импортируем Op из sequelize
 
 @Injectable()
 export class CardsService {
@@ -171,23 +172,57 @@ export class CardsService {
 
   // Метод для удаления карточки
   async deleteCard(userId: number, cardId: string): Promise<void> {
-    this.logger.log('Attempting to delete card with ID: ' + cardId);
+    this.logger.log("Attempting to delete card with ID: " + cardId);
     try {
       const card = await this.cardRepository.findOne({
         where: { id: cardId, userId },
       });
 
       if (!card) {
-        this.logger.error(`Card with id ${cardId} not found for user id: ${userId}`);
+        this.logger.error(
+          `Card with id ${cardId} not found for user id: ${userId}`,
+        );
         throw new BadRequestException(AppError.CARD_NOT_FOUND);
       }
 
       await card.destroy();
-      this.logger.log(`Card with id ${cardId} deleted successfully for user id: ${userId}`);
+      this.logger.log(
+        `Card with id ${cardId} deleted successfully for user id: ${userId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error deleting card with id ${cardId} for user ${userId}`, error.stack);
+      this.logger.error(
+        `Error deleting card with id ${cardId} for user ${userId}`,
+        error.stack,
+      );
       throw error;
     }
   }
 
+  // Метод для удаления указанных меток с карточек пользователя removeLabelsFromUserCards
+  async removeLabelsFromCards(
+    userId: number,
+    labels: string[],
+  ): Promise<Card[]> {
+    try {
+      // Находим все карточки пользователя, которые содержат указанные метки
+      const cards = await this.cardModel.findAll({
+        where: {
+          userId,
+          labels: {
+            [Op.overlap]: labels, // Используем оператор overlap для поиска пересекающихся меток
+          },
+        },
+      });
+
+      // Обновляем каждую карточку, удаляя указанные метки
+      for (const card of cards) {
+        card.labels = card.labels.filter((label) => !labels.includes(label));
+        await card.save(); // Сохраняем обновленную карточку
+      }
+
+      return cards; // Возвращаем обновленные карточки
+    } catch (error) {
+      throw new Error("Failed to remove labels");
+    }
+  }
 }

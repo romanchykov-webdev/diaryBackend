@@ -15,6 +15,9 @@ import { JwtAuthGuard } from "../../guards/jwt-guard";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import { UpdateCardDTO } from "./dto/update-card.dto";
 import { UpdateCardOrdersDTO } from "./dto/update-card-orders.dto";
+import { Card } from "./models/card.model";
+import { UpdateLabelsDto } from "./dto/update-labels.dto";
+
 // import { GetUniqueLabelsDTO } from "./dto/get-unique-labels.dto";
 
 @Controller("cards")
@@ -102,13 +105,29 @@ export class CardsController {
   @Delete(":id")
   async deleteCard(@Param("id") cardId: string, @Req() request): Promise<void> {
     const user = request.user;
-    console.log('Attempting to delete card with ID:', cardId);
+    console.log("Attempting to delete card with ID:", cardId);
     try {
       await this.cardsService.deleteCard(user.id, cardId);
-      console.log('Card successfully deleted');
+      console.log("Card successfully deleted");
     } catch (error) {
-      console.error('Error deleting card:', error);
+      console.error("Error deleting card:", error);
       throw error;
     }
+  }
+
+  // Метод для удаления указанных меток с карточек пользователя
+  @ApiTags("API")
+  @ApiResponse({ status: 200, description: "Card successfully deleted" })
+  @Post("remove-labels")
+  @UseGuards(JwtAuthGuard) // Добавьте защиту, чтобы убедиться, что пользователь авторизован
+  async removeLabelsFromCards(
+    @Body() updateLabelsDto: UpdateLabelsDto,
+    @Req() request,
+  ) {
+    const userId = request.user.id; // Получаем идентификатор пользователя из запроса
+    return await this.cardsService.removeLabelsFromCards(
+      userId,
+      updateLabelsDto.labels,
+    );
   }
 }
